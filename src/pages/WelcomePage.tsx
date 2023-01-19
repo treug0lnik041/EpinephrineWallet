@@ -1,4 +1,4 @@
-import { Button, Card, Container, Row, Spacer, Text } from "@nextui-org/react";
+import { Button, Card, Container, Spacer, Text } from "@nextui-org/react";
 import React, { useContext, useState } from "react";
 
 import ImportModal from "../components/UI/Modal/ImportModal/ImportModal";
@@ -23,9 +23,9 @@ function WelcomePage() {
 	};
 
 	return (
-		<div style={{'justifyItems': 'center', 'justifyContent': 'center', 'marginTop': '10%'}}>
+		<div style={{'marginTop': '3vh'}}>
 			<Text>{
-				wallet?.web3.currentProvider ? 
+				wallet.web3?.currentProvider ? 
 					`Powered by ${(typeof wallet?.web3.currentProvider === "object") ? 
 						("host" in wallet.web3.currentProvider) ? 
 							getProviderName(wallet.web3.currentProvider.host) : 
@@ -34,15 +34,14 @@ function WelcomePage() {
 					<Button onPress={connectToEthereum}>Connent to Ethereum</Button>}
 			</Text>
 
-			<Container css={{'width': '60%'}}>
+			<Container css={{'width': '700px'}}>
 				<Card color="primary">
-					<Row justify="center" align="center">
-						<Text h1>Welcome to Epinephrine Wallet!</Text>
-					</Row>
-					<Spacer y={1}/>
-					<Row justify="center" align="center">
+					<Card.Header>
+						<Text h1>Epinephrine Wallet</Text>
+					</Card.Header>
+					<Card.Body css={{'justifyContent': 'center', 'justifyItems': 'center', 'alignItems': 'center'}}>
 						<Text h2>Seems like you have no wallets. Let's import or create a new one.</Text>
-					</Row>
+					</Card.Body>
 					<Spacer y={2}/>
 					<Card.Body>
 						<Button.Group vertical bordered color="gradient">

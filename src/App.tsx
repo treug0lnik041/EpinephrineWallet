@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import { NextUIProvider, createTheme } from '@nextui-org/react';
@@ -8,6 +8,8 @@ import { ProviderEnum } from './web3-sdk/utils';
 import Web3 from 'web3';
 import Wallet from './web3-sdk/Wallet';
 import { WalletContext } from './web3-sdk/WalletContext';
+import WalletPage from './pages/WalletPage';
+import PasswordModal from './components/UI/Modal/PasswordModal/PasswordModal';
 
 const theme = createTheme({
 	type: "dark", // it could be "light" or "dark"
@@ -37,6 +39,12 @@ function App() {
 	const [web3] = useState<Web3>(new Web3(ProviderEnum.Mainnet));
 	const [wallet, setWallet] = useState<Wallet>(new Wallet(web3));
 
+	const [passwordModalVisible, setPasswordModalVisible] = useState(true);
+
+	useEffect(() => {
+		console.log("Wallet has been setted");
+	}, [wallet]);
+
 	return (
 		<NextUIProvider theme={theme}>
 			<div className="App">
@@ -44,10 +52,12 @@ function App() {
 					wallet: wallet,
 					setWallet: setWallet
 				}}>
+					<PasswordModal visible={passwordModalVisible} setVisible={setPasswordModalVisible}/>
 					<BrowserRouter>
 						<Routes>
-							<Route path="/" element={<WelcomePage/>}/>
+							<Route path="/" element={wallet.accounts[0] ? <WalletPage/> : <WelcomePage/>}/>
 							<Route path="welcome" element={<WelcomePage/>}/>
+							<Route path="wallet" element={<WalletPage/>}/>
 						</Routes>
 					</BrowserRouter>
 				</WalletContext.Provider>

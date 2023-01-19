@@ -1,51 +1,68 @@
 import Web3 from 'web3';
-import Account from './Account';
+import { ProviderEnum } from './utils';
 
 export default class Wallet {
 	public web3: Web3;
-	public accounts: Account[];
+	private password?: string;
+	public accounts;
 
-	constructor(web3: Web3, accounts?: Account[]) {
-		this.web3 = web3;
-		if (accounts) {
-			this.accounts = accounts;
+	constructor(web3?: Web3, password?: string) {
+		if (web3) {
+			this.web3 = web3;
 		} else {
-			this.accounts = new Array<Account>();
-			if (localStorage.getItem("length") !== null) {
-				this.getFromLocalStorage();
-			}
+			this.web3 = new Web3(ProviderEnum.Mainnet);
+		}
+
+		this.password = password;
+		this.accounts = this.web3.eth.accounts.wallet;
+	}
+
+	setPassword(password: string) {
+		this.password = password;
+		this.load();
+	}
+
+	load() {
+		if (this.password) {
+			this.accounts.load(this.password);
+		} else {
+			throw new Error("Password hasn't been setted");
 		}
 	}
 
-	getFromLocalStorage() {
-		const _length = localStorage.getItem("length");
-		if (_length) {
-			const length = parseInt(_length) - 1;
-			for (let i = 0; i < length; i++) {
-				const privateKey = localStorage.getItem(`account${i}`);
-				if (privateKey) {
-					this.accounts.push(new Account(this.web3, privateKey));
-				}
-			}
+	save() {
+		if (this.password) {
+			this.accounts.save(this.password);
+		} else {
+			throw new Error("Password hasn't been setted");
 		}
 	}
 
 	add(privateKey: string) {
-		this.accounts.push(new Account(this.web3, privateKey));
-		localStorage.setItem("length", (this.accounts.length-1).toString());
-		localStorage.setItem(`account${this.accounts.length}`, privateKey);
+		this.accounts.add(privateKey);
+		this.save();
+	}
+
+	create() {
+		this.accounts.create(1);
+		this.save();
 	}
 
 	clear() {
-		this.accounts.splice(0);
+		this.accounts.clear();
 		localStorage.clear();
 	}
 
-	/*remove(publicKey: string) {
-		this.accounts.map((account, index) => {
-			if (account.address === publicKey) {
-				this.accounts.splice(index, 1);
-			}
-		});
-	}*/
+	asArray() {
+		const arr = [];
+		for (let i = 0; i < this.accounts.length; i++) {
+			arr.push(this.accounts[i]);
+		}
+
+		return arr;
+	}
+
+	async balanceOf(address: string) : Promise<number> {
+		return parseInt(await this.web3.eth.getBalance(address));
+	}
 }

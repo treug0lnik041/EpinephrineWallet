@@ -2,4 +2,4 @@ import { createContext } from "react";
 
 import Wallet from "./Wallet";
 
-export const WalletContext = createContext<{wallet: Wallet | undefined, setWallet: any}>({wallet: undefined, setWallet: undefined});
+export const WalletContext = createContext<{wallet: Wallet, setWallet: any}>({wallet: new Wallet(), setWallet: undefined});

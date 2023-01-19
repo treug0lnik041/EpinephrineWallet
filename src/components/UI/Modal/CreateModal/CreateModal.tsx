@@ -1,6 +1,5 @@
 import { Button, Input, Modal, Text } from "@nextui-org/react";
 import React, { useContext, useEffect, useState } from "react";
-import Account from "../../../../web3-sdk/Account";
 import { WalletContext } from "../../../../web3-sdk/WalletContext";
 
 function ImportModal({visible, setVisible} : {visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>>}) {
@@ -8,17 +7,15 @@ function ImportModal({visible, setVisible} : {visible: boolean, setVisible: Reac
 	const { wallet, setWallet } = useContext(WalletContext);
 
 	useEffect(() => {
-		if (wallet) {
-			setPrivateKey(Account.create(wallet.web3));	
-		}
+		setPrivateKey(wallet.web3.eth.accounts.create().privateKey);
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handler = () => {
-		let _wallet = wallet;
-		_wallet?.add(privateKey);
+		let _wallet = wallet; 
+		_wallet.add(privateKey);
 		setWallet(_wallet);
-		console.log(`New account has been added with public key: ${wallet?.accounts[wallet.accounts.length-1].address}`)
+		console.log(`New account has been added with public key: ${wallet.accounts[wallet.accounts.length-1].address}`);
 		setVisible(false);
 	};
 

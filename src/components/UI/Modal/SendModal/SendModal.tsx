@@ -1,17 +1,18 @@
-import { Button, Input, Modal, Text } from "@nextui-org/react";
 import React, { useContext, useState } from "react";
+import { Modal, Text, Button, Input } from "@nextui-org/react";
 import { WalletContext } from "../../../../web3-sdk/WalletContext";
 
-function ImportModal({visible, setVisible} : {visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>>}) {
-	const [privateKey, setPrivateKey] = useState("");
+function SendModal({ visible, setVisible } : { visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>> }) {
 	const { wallet, setWallet } = useContext(WalletContext);
+	const [ address, setAddress ] = useState("");
+	const [ amount, setAmount ] = useState("0");
+
 
 	const handler = () => {
-		wallet.add(privateKey);
-		setWallet(wallet);
-		console.log(`New account has been added with public key: ${wallet?.accounts[wallet.accounts.length-1].address}`)
+		// TODO: Implement sending ether
+		console.log(`DEBUG: Sending ${amount} to "${address}"`);
 		setVisible(false);
-	};
+	}
 
 	return (
 		<Modal
@@ -23,29 +24,38 @@ function ImportModal({visible, setVisible} : {visible: boolean, setVisible: Reac
         	onClose={() => { setVisible(false) }}
 		>
 			<Modal.Header>
-				<Text>Import Private Key</Text>
+				<Text>Send Ether</Text>
 			</Modal.Header>
 			<Modal.Body>
+				<Input
+					clearable
+					bordered
+					fullWidth
+					color="primary"
+					size="lg"
+					placeholder="Address"
+					onChange={(e) => setAddress(e.target.value)}
+				/>
 				<Input
             		clearable
             		bordered
             		fullWidth
             		color="primary"
             		size="lg"
-            		placeholder="Private Key"
-					onChange={(e) => setPrivateKey(e.target.value)}
+            		placeholder="Amount in ETH"
+					onChange={(e) => setAmount(e.target.value)}
 				/>
 			</Modal.Body>
 			<Modal.Footer>
 				<Button auto flat color="error" onPress={() => setVisible(false)}>
             		Close
           		</Button>
-          		<Button auto onPress={handler}>
-            		Import
+          		<Button auto color="success" onPress={handler}>
+            		Send
           		</Button>
 			</Modal.Footer>
 		</Modal>
 	)
 }
 
-export default ImportModal;
+export default SendModal;

@@ -1,18 +1,16 @@
-import { Button, Input, Modal, Text } from "@nextui-org/react";
 import React, { useContext, useState } from "react";
+import { Modal, Text, Input, Button } from "@nextui-org/react";
 import { WalletContext } from "../../../../web3-sdk/WalletContext";
 
-function ImportModal({visible, setVisible} : {visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>>}) {
-	const [privateKey, setPrivateKey] = useState("");
+function PasswordModal({ visible, setVisible } : { visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>> }) {
 	const { wallet, setWallet } = useContext(WalletContext);
+	const [password, setPassword] = useState("");
 
 	const handler = () => {
-		wallet.add(privateKey);
-		setWallet(wallet);
-		console.log(`New account has been added with public key: ${wallet?.accounts[wallet.accounts.length-1].address}`)
+		wallet.setPassword(password);
 		setVisible(false);
-	};
-
+	}
+	
 	return (
 		<Modal
         	closeButton
@@ -23,17 +21,17 @@ function ImportModal({visible, setVisible} : {visible: boolean, setVisible: Reac
         	onClose={() => { setVisible(false) }}
 		>
 			<Modal.Header>
-				<Text>Import Private Key</Text>
+				<Text>Decrypt wallet</Text>
 			</Modal.Header>
 			<Modal.Body>
-				<Input
+				<Input.Password
             		clearable
             		bordered
             		fullWidth
             		color="primary"
             		size="lg"
-            		placeholder="Private Key"
-					onChange={(e) => setPrivateKey(e.target.value)}
+            		placeholder="Password"
+					onChange={(e) => setPassword(e.target.value)}
 				/>
 			</Modal.Body>
 			<Modal.Footer>
@@ -41,11 +39,11 @@ function ImportModal({visible, setVisible} : {visible: boolean, setVisible: Reac
             		Close
           		</Button>
           		<Button auto onPress={handler}>
-            		Import
+            		Ok
           		</Button>
 			</Modal.Footer>
 		</Modal>
 	)
 }
 
-export default ImportModal;
+export default PasswordModal;
