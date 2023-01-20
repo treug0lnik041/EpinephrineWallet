@@ -1,29 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import { WalletContext } from "../web3-sdk/WalletContext";
-import { Avatar, Button, Card, Col, Container, Dropdown, Spacer, Text, User } from "@nextui-org/react";
+import { Button, Card, Col, Container, Dropdown, Spacer, Text, User } from "@nextui-org/react";
 import SendModal from "../components/UI/Modal/SendModal/SendModal";
 
 function WalletPage() {
 	const { wallet } = useContext(WalletContext);
-	const [ currentAccount, setCurrentAccount ] = useState(wallet.accounts[0]);
+	const [ currentAccount, setCurrentAccount ] = useState(wallet.asArray()[0]);
 	const [ balance, setBalance ] = useState(0);
 	const [ visibleSendModal, setVisibleSendModal ] = useState(false);
 
 	useEffect(() => {
 		wallet.balanceOf(currentAccount.address).then((_balance) => setBalance(_balance));
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [balance, currentAccount]);
+	}, [balance, currentAccount, wallet]);
 
 	const handleAction = (key: any) => {
 		if (!(key.anchorKey[0] === '$')) {
-			setCurrentAccount(wallet.accounts[key.anchorKey]);
+			setCurrentAccount(wallet.asArray()[key.anchorKey]);
 		} else {
 			switch (key.anchorKey) {
 				case "$.0.0":
+					// Export current account's private key directly to the clipboard
 					console.log("Exporting!");
 					break;
 				case "$.0.1":
-					console.log("Deleting!");
+					// Delete current account
+					wallet.remove(currentAccount.address);
+					setCurrentAccount(wallet.asArray()[0]);
 					break;
 			}
 		}

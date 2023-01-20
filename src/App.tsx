@@ -55,7 +55,7 @@ function App() {
 					<PasswordModal visible={passwordModalVisible} setVisible={setPasswordModalVisible}/>
 					<BrowserRouter>
 						<Routes>
-							<Route path="/" element={wallet.accounts[0] ? <WalletPage/> : <WelcomePage/>}/>
+							<Route path="/" element={wallet.asArray()[0] ? <WalletPage/> : <WelcomePage/>}/>
 							<Route path="welcome" element={<WelcomePage/>}/>
 							<Route path="wallet" element={<WalletPage/>}/>
 						</Routes>

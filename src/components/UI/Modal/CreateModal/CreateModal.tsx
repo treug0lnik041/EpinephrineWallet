@@ -15,7 +15,6 @@ function ImportModal({visible, setVisible} : {visible: boolean, setVisible: Reac
 		let _wallet = wallet; 
 		_wallet.add(privateKey);
 		setWallet(_wallet);
-		console.log(`New account has been added with public key: ${wallet.accounts[wallet.accounts.length-1].address}`);
 		setVisible(false);
 	};
 

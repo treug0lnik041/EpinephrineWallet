@@ -4,7 +4,7 @@ import { ProviderEnum } from './utils';
 export default class Wallet {
 	public web3: Web3;
 	private password?: string;
-	public accounts;
+	private accounts;
 
 	constructor(web3?: Web3, password?: string) {
 		if (web3) {
@@ -53,10 +53,15 @@ export default class Wallet {
 		localStorage.clear();
 	}
 
+	remove(address: string | number) {
+		this.accounts.remove(address);
+	}
+
 	asArray() {
 		const arr = [];
-		for (let i = 0; i < this.accounts.length; i++) {
-			arr.push(this.accounts[i]);
+		for (let i = 0, j = 0; i < this.accounts.length; j++) {
+			if (this.accounts[j] !== undefined) { i++ } else { continue; }
+			arr.push(this.accounts[j]);
 		}
 
 		return arr;
