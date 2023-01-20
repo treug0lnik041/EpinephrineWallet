@@ -1,8 +1,10 @@
 import { Button, Input, Modal, Text } from "@nextui-org/react";
 import React, { useContext, useEffect, useState } from "react";
 import { WalletContext } from "../../../../web3-sdk/WalletContext";
+import { useNavigate } from "react-router-dom";
 
 function ImportModal({visible, setVisible} : {visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>>}) {
+	const navigate = useNavigate();
 	const [privateKey, setPrivateKey] = useState("");
 	const { wallet, setWallet } = useContext(WalletContext);
 
@@ -16,6 +18,7 @@ function ImportModal({visible, setVisible} : {visible: boolean, setVisible: Reac
 		_wallet.add(privateKey);
 		setWallet(_wallet);
 		setVisible(false);
+		navigate("/wallet");
 	};
 
 	return (

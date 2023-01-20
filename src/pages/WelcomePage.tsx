@@ -40,7 +40,10 @@ function WelcomePage() {
 						<Text h1>Epinephrine Wallet</Text>
 					</Card.Header>
 					<Card.Body css={{'justifyContent': 'center', 'justifyItems': 'center', 'alignItems': 'center'}}>
-						<Text h2>Seems like you have no wallets. Let's import or create a new one.</Text>
+						{ wallet.asArray().length 
+							? <Text h2>Let's import new account</Text> :
+							<Text h2>Seems like you have no wallets. Let's import or create a new one.</Text>
+						}
 					</Card.Body>
 					<Spacer y={2}/>
 					<Card.Body>
