@@ -57,7 +57,7 @@ function App() {
 						<Routes>
 							<Route path="/" element={wallet.asArray()[0] ? <WalletPage/> : <WelcomePage/>}/>
 							<Route path="welcome" element={<WelcomePage/>}/>
-							<Route path="wallet" element={<WalletPage/>}/>
+							<Route path="wallet" element={wallet.asArray()[0] ? <WalletPage/> : <WelcomePage/>}/>
 						</Routes>
 					</BrowserRouter>
 				</WalletContext.Provider>

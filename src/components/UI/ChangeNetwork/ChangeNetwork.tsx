@@ -10,7 +10,7 @@ const networkItems = [
 	{ key: "Custom", name: "Custom" }
 ];
 
-function ChangeNetwork() {
+function ChangeNetwork({ setProvider }: { setProvider: React.Dispatch<React.SetStateAction<string>>}) {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { wallet, setWallet } = useContext(WalletContext);
 	const [ visible, setVisible ] = useState(false);
@@ -22,6 +22,8 @@ function ChangeNetwork() {
 	[selected]);
 
 	useEffect(() => {
+		setProvider(selectedValue);
+
 		switch (selectedValue) {
 			case "Mainnet":
 				wallet.web3.setProvider(ProviderEnum.Mainnet);
@@ -48,7 +50,7 @@ function ChangeNetwork() {
 	return (
 		<div className="changenetwork">
 			<Dropdown>
-				<Dropdown.Button>
+				<Dropdown.Button color="gradient">
 					{selectedValue}
 				</Dropdown.Button>
 					<Dropdown.Menu

@@ -1,10 +1,11 @@
 import Web3 from 'web3';
+import { Account, WalletBase } from "web3-core";
 import { ProviderEnum } from './utils';
 
 export default class Wallet {
 	public web3: Web3;
 	private password?: string;
-	private accounts;
+	private accounts: WalletBase;
 
 	constructor(web3?: Web3, password?: string) {
 		if (web3) {
@@ -55,6 +56,7 @@ export default class Wallet {
 
 	remove(address: string | number) {
 		this.accounts.remove(address);
+		this.save();
 	}
 
 	asArray() {
@@ -69,5 +71,21 @@ export default class Wallet {
 
 	async balanceOf(address: string) : Promise<number> {
 		return parseInt(await this.web3.eth.getBalance(address));
+	}
+
+	/// @ from must be a public key that exists in wallet
+	async sendEther(from: Account, to: string, amount: number | string) {
+		const nonce = await this.web3.eth.getTransactionCount(from.address);
+
+		const tx = {
+			to: to,
+			gas: 30000,
+			value: amount,
+			nonce: nonce,
+		};
+
+		const signedTx = await from.signTransaction(tx);
+		if (signedTx.rawTransaction) return await this.web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+		else throw new Error("Cannot sign transaction");
 	}
 }

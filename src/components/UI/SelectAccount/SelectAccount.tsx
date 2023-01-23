@@ -2,8 +2,9 @@ import { Dropdown, User } from "@nextui-org/react";
 import React, { useContext } from "react";
 import { WalletContext } from "../../../web3-sdk/WalletContext";
 import { useNavigate } from "react-router-dom";
+import { Account } from "web3-core";
 
-function SelectAccount({ currentAccount, setCurrentAccount } : any) {
+function SelectAccount({ currentAccount, setCurrentAccount } : { currentAccount: Account, setCurrentAccount: React.Dispatch<React.SetStateAction<Account>> }) {
 	const navigate = useNavigate();
 
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -17,11 +18,16 @@ function SelectAccount({ currentAccount, setCurrentAccount } : any) {
 					navigate("/welcome");
 					break;
 				case "$.0.1":
-					// Export current account's private key directly to the clipboard
-					navigator.clipboard.writeText(currentAccount.privateKey);
-					console.log("Exporting!");
+					// Export current account's public key directly to the clipboard
+					navigator.clipboard.writeText(currentAccount.address);
+					console.log(`Public key has been exported to the clipboard: ${currentAccount.address}`);
 					break;
 				case "$.0.2":
+					// Export current account's private key directly to the clipboard
+					navigator.clipboard.writeText(currentAccount.privateKey);
+					console.log(`Private key has been exported to the clipboard: ${currentAccount.privateKey}`);
+					break;
+				case "$.0.3":
 					// Delete current account
 					wallet.remove(currentAccount.address);
 					setCurrentAccount(wallet.asArray()[0]);
@@ -53,6 +59,7 @@ function SelectAccount({ currentAccount, setCurrentAccount } : any) {
         		onSelectionChange={(key) => handleAction(key)}>
 				<Dropdown.Section title="Actions">
 					<Dropdown.Item color="success">Add new account</Dropdown.Item>
+					<Dropdown.Item color="success">Export public key</Dropdown.Item>
 					<Dropdown.Item color="warning">Export private key</Dropdown.Item>
 					<Dropdown.Item color="error">Delete Account</Dropdown.Item>
 				</Dropdown.Section>

@@ -1,8 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Modal, Text, Button, Input } from "@nextui-org/react";
 import { WalletContext } from "../../../../web3-sdk/WalletContext";
+import { Account } from "web3-core";
 
-function SendModal({ visible, setVisible } : { visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>> }) {
+function SendModal({ visible, setVisible, currentAccount } : { visible: boolean, setVisible: React.Dispatch<React.SetStateAction<boolean>>, currentAccount: Account }) {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { wallet, setWallet } = useContext(WalletContext);
 	const [ address, setAddress ] = useState("");
 	const [ amount, setAmount ] = useState("0");
@@ -11,6 +13,7 @@ function SendModal({ visible, setVisible } : { visible: boolean, setVisible: Rea
 	const handler = () => {
 		// TODO: Implement sending ether
 		console.log(`DEBUG: Sending ${amount} to "${address}"`);
+		wallet.sendEther(currentAccount, address, wallet.web3.utils.toWei(amount, "ether"));
 		setVisible(false);
 	}
 

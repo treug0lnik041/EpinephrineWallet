@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Table, Text } from "@nextui-org/react";
-import Transaction from "../../../web3-sdk/Transaction";
+import { Transaction } from "../../../web3-sdk/Etherscan";
 import Web3 from "web3";
 
 type TxRow = {
