@@ -26,6 +26,7 @@ function WalletPage() {
 			Mainscan.etherToUSD().then((value) => setInUSD((parseFloat(value.ethusd) * parseFloat(wallet.web3.utils.fromWei(balance.toString(), "ether"))).toFixed(2)));
 		} else if (provider === "Goerli") {
 			Goerliscan.getAccountTransactions(wallet.web3, currentAccount.address).then((value) => setTxs(value.reverse()));
+			setInUSD("0.00");
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [balance, currentAccount, wallet, visibleSendModal, provider]);

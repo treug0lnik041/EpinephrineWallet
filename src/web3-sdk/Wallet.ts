@@ -75,12 +75,17 @@ export default class Wallet {
 
 	/// @ from must be a public key that exists in wallet
 	async sendEther(from: Account, to: string, amount: number | string) {
+		let value = 0;
+		if (typeof amount === "string") value = parseInt(amount);
+		else value = amount;
+		if (await this.balanceOf(from.address) < value) throw new Error("insufficient funds");
+
 		const nonce = await this.web3.eth.getTransactionCount(from.address);
 
 		const tx = {
 			to: to,
 			gas: 30000,
-			value: amount,
+			value: value,
 			nonce: nonce,
 		};
 

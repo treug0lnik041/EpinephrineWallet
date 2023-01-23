@@ -13,7 +13,7 @@ function SendModal({ visible, setVisible, currentAccount } : { visible: boolean,
 	const handler = () => {
 		// TODO: Implement sending ether
 		console.log(`DEBUG: Sending ${amount} to "${address}"`);
-		wallet.sendEther(currentAccount, address, wallet.web3.utils.toWei(amount, "ether"));
+		wallet.sendEther(currentAccount, address, wallet.web3.utils.toWei(amount, "ether")).then((tx) => { console.log(tx.transactionHash) });
 		setVisible(false);
 	}
 
