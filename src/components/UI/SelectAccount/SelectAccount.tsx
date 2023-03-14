@@ -52,7 +52,7 @@ function SelectAccount({ currentAccount, setCurrentAccount } : { currentAccount:
       		<Dropdown.Menu
         		aria-label="Single selection actions"
         		color="secondary"
-				disabledKeys={[wallet.asArray().length === 1 ? "$.0.2" : " "]}
+				disabledKeys={[wallet.asArray().length === 1 ? "$.0.3" : " "]}
         		disallowEmptySelection
         		selectionMode="single"
         		selectedKeys={new Set([`${wallet.asArray().indexOf(currentAccount)}`])}
